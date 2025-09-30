@@ -33,3 +33,39 @@ It is a web application that helps users search, read, and summarize space-biolo
 
 ## Project Structure
 
+- `server.py` – FastAPI backend with endpoints for search, abstracts, summarization, translation, and reputation scoring  
+- `static/` – frontend files (`index.html`, `app.js`, `styles.css`)  
+- `resources.html` – NASA resources page  
+- `requirements.txt` – Python dependencies  
+- `README.md` – project description and instructions  
+- `LICENSE` – MIT License
+
+---
+
+## Quickstart
+
+Follow these steps to run the app locally:
+
+1. **Clone or download this repository**
+
+   ```bash
+   git clone https://github.com/<your-username>/space-biology-knowledge-engine.git
+   cd space-biology-knowledge-engine
+   Or click "Code → Download ZIP" on GitHub and unzip it.
+
+(Optional, but recommended) Create a virtual environment
+python -m venv .venv
+# On macOS/Linux:
+source .venv/bin/activate
+# On Windows:
+.venv\Scripts\activate
+
+2. Install dependencies
+   pip install -r requirements.txt
+
+3. Run the server
+   uvicorn server:app --reload --host 127.0.0.1 --port 8010
+
+4. Open the app
+   Open your browser and go to:
+   http://127.0.0.1:8010
