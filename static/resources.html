@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>NASA Data & Resources</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="/static/styles.css" />
+  <style>
+    /* Page-specific tweaks (reuses styles.css for the general look) */
+    .wrap{width:min(1100px,95vw);margin:24px auto}
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px}
+    .card{background:transparent;border:1px dashed rgba(255,255,255,.3);border-radius:14px;padding:14px}
+    .card h3{margin:.2rem 0 .4rem}
+    .card p{margin:.2rem 0 .6rem;color:var(--muted)}
+    .card a{font-weight:700}
+    .pill{display:inline-block;margin:4px 6px 0 0;padding:4px 8px;border-radius:999px;border:1px solid rgba(255,255,255,.25);font-size:12px}
+    .muted{color:var(--muted)}
+    .topbar-actions{display:flex;align-items:center;gap:10px}
+    .topbar-actions a{border:1px solid rgba(255,255,255,.25);padding:8px 12px;border-radius:10px;text-decoration:none;color:var(--text)}
+    .note{border-left:3px solid rgba(255,255,255,.35);padding-left:10px;margin:12px 0;color:var(--muted)}
+    .list-tight li{margin:.3rem 0}
+  </style>
+</head>
+<body>
+  <!-- Consistent header with the app -->
+  <header class="topbar">
+    <div class="brand">Space Biology Knowledge Engine</div>
+    <div class="topbar-actions">
+      <a href="/" aria-label="Back to App">Back to App</a>
+    </div>
+  </header>
+
+  <div class="wrap">
+    <h1>NASA Data & Resources</h1>
+    <p class="muted">
+      Curated entry points to official space biology data and documentation. Use these to complement PubMed
+      literature with primary datasets from NASA’s Open Science Data Repository (OSDR).
+    </p>
+
+    <h2>Core Repositories</h2>
+    <div class="grid">
+      <div class="card">
+        <h3>OSDR — Open Science Data Repository</h3>
+        <p>Unified portal for GeneLab (omics) and ALSDA (non-omics/physiology) with study pages, metadata, and downloads.</p>
+        <a href="https://www.nasa.gov/osdr/" target="_blank" rel="noopener">OSDR Home</a>
+        <div>
+          <span class="pill">Studies</span>
+          <span class="pill">Metadata</span>
+          <span class="pill">Downloads</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>GeneLab (GLDS)</h3>
+        <p>Open omics datasets from spaceflight and analogs (RNA-seq, microarray, proteomics, etc.).</p>
+        <a href="https://www.nasa.gov/osdr-genelab-about/" target="_blank" rel="noopener">About GeneLab</a>
+        <p class="muted">Tip: search GLDS accessions (e.g., GLDS-###) on OSDR study pages.</p>
+      </div>
+
+      <div class="card">
+        <h3>ALSDA</h3>
+        <p>Life sciences data beyond omics (phenotypes, physiology, imaging, biomedical, behavioral).</p>
+        <a href="https://awg.osdr.space/" target="_blank" rel="noopener">OSDR Analysis Working Groups</a>
+        <p class="muted">Community standards and analysis guidance.</p>
+      </div>
+    </div>
+
+    <h2>APIs & Tutorials</h2>
+    <div class="grid">
+      <div class="card">
+        <h3>OSDR Tutorials</h3>
+        <p>Step-by-step guides for search, filtered access, and public S3 downloads.</p>
+        <a href="https://osdr-tutorials.readthedocs.io/en/latest/pages/guides/access_osdr_data.html" target="_blank" rel="noopener">
+          Access OSDR Data
+        </a>
+        <p class="muted">Includes examples for programmatic workflows.</p>
+      </div>
+
+      <div class="card">
+        <h3>Community API Notes</h3>
+        <p>Unofficial but useful references for working with OSDR/GeneLab programmatically.</p>
+        <a href="https://github.com/nasa/OSDR_Tutorials" target="_blank" rel="noopener">OSDR Tutorials (GitHub)</a><br/>
+        <a href="https://github.com/dr-richard-barker/OSDR_tutorial.io/blob/main/osdr-public-api.md" target="_blank" rel="noopener">OSDR Public API Notes</a>
+      </div>
+
+      <div class="card">
+        <h3>GeneLab Utilities</h3>
+        <p>Helper scripts and Python tools used by the GeneLab community.</p>
+        <a href="https://hackmd.io/%40AstrobioMike/Hy_-RVzqc" target="_blank" rel="noopener">genelab-utils guide</a><br/>
+        <a href="https://torres-alexis.github.io/dp_tools/dp_tools/glds_api/commons.html" target="_blank" rel="noopener">dp_tools GLDS helpers</a>
+      </div>
+    </div>
+
+    <h2>Environment / Exposure Data</h2>
+    <div class="grid">
+      <div class="card">
+        <h3>Radiation & Environmental Tutorials</h3>
+        <p>Guidance for radiation and environmental exposure datasets that often accompany space biology analyses.</p>
+        <a href="https://dev2-osdr-tutorials.readthedocs.io/en/latest/" target="_blank" rel="noopener">OSDR Tutorials (Index)</a>
+      </div>
+    </div>
+
+    <h2>Using These Resources in the App</h2>
+    <ul class="list-tight">
+      <li>Add study links (OSDR/GeneLab) alongside PubMed results when applicable.</li>
+      <li>Document filters (species, sex, age, design) so results are reproducible.</li>
+      <li>When you analyze datasets, cite the study page and accession IDs in your report.</li>
+    </ul>
+    <p class="note">
+      Always verify the latest documentation on official OSDR pages before relying on an API or workflow in production.
+    </p>
+  </div>
+</body>
+</html>
