@@ -1,0 +1,212 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Space Biology Knowledge Engine</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="/static/styles.css" />
+
+  <style>
+    .hidden{display:none!important}
+
+    .topbar{
+      display:flex;align-items:center;justify-content:space-between;
+      padding:14px 20px;background:rgba(14,22,46,.18);
+      border-bottom:1px solid rgba(255,255,255,.2);backdrop-filter:blur(3px);
+      position:sticky;top:0;z-index:20;
+    }
+    .brand{font-weight:700;letter-spacing:.2px;display:flex;align-items:center;gap:8px}
+    .right-controls{display:flex;align-items:center;gap:12px}
+    .resources-link{
+      background:#ffd166;color:#221;border:none;text-decoration:none;
+      padding:8px 12px;border-radius:10px;font-weight:700;display:inline-flex;align-items:center;
+    }
+    .resources-link:hover{filter:brightness(1.05)}
+    .langbox{display:flex;align-items:center;gap:6px}
+    .langbox label{font-size:13px;color:var(--muted)}
+    .langbox select{
+      min-width:140px;padding:8px 10px;border-radius:10px;
+      border:1px solid rgba(255,255,255,.25);background:transparent;color:var(--text);
+    }
+    select option{background:#0b0f1a;color:#f1f4ff}
+    select:focus-visible{outline:2px solid #5ad1ff}
+
+    .content section{width:min(1100px,96vw);margin:0 auto 16px}
+    pre#abstract{border:1px dashed rgba(255,255,255,.3);border-radius:12px;padding:12px}
+
+    /* Reputation area */
+    .reputation{margin-top:16px}
+    .reputation h3{margin:8px 0}
+
+    /* NEW: SVG chart container */
+    #repChartSvg{max-width:780px;width:100%;overflow:hidden;margin:6px 0 2px}
+
+    /* Breakdown rows (keep) */
+    #repBreakdown{margin-top:8px}
+    .rep-row{
+      display:grid;
+      grid-template-columns: 180px 1fr 48px;
+      align-items:center;
+      gap:12px;
+      padding:8px 0;
+      border-top:1px dashed rgba(255,255,255,.25);
+    }
+    .rep-row:first-child{border-top:0}
+    .rep-left{font-weight:600}
+    .rep-val{ text-align:right; font-variant-numeric:tabular-nums }
+
+    .repbar{
+      height:10px; border-radius:999px; overflow:hidden;
+      background:rgba(255,255,255,.18);
+      border:1px solid rgba(255,255,255,.25);
+    }
+    .repbar > span{
+      display:block; height:100%; width:0%;
+      background:linear-gradient(90deg,#ff9f66,#aef45a,#5ad1ff);
+      transition:width .35s ease;
+    }
+
+    .badge{display:inline-block;margin:8px 0;padding:6px 10px;border-radius:999px;font-weight:800;letter-spacing:.2px;color:#00121a;}
+    .badge.low{background:#ff8080;}
+    .badge.medium{background:#ffd166;}
+    .badge.high{background:#8df59a;}
+    .badge.veryhigh{background:#5ad1ff;}
+
+    .meter{width:100%;height:10px;background:rgba(255,255,255,.18);border-radius:999px;overflow:hidden;border:1px solid rgba(255,255,255,.25);margin:6px 0 10px;}
+    .meter > span{display:block;height:100%;width:0%;background:linear-gradient(90deg,#ff9f66,#aef45a,#5ad1ff);transition:width .4s ease;}
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">🛰️ <span id="appTitle">Space Biology Knowledge Engine</span></div>
+    <div class="right-controls">
+      <a class="resources-link" href="/static/resources.html">Resources</a>
+      <div class="langbox">
+        <label for="langSelect">Language:</label>
+        <select id="langSelect">
+          <option value="en">English</option><option value="es">Español</option><option value="fr">Français</option>
+          <option value="de">Deutsch</option><option value="it">Italiano</option><option value="pt">Português</option>
+          <option value="ru">Русский</option><option value="zh-CN">中文(简)</option><option value="ja">日本語</option>
+          <option value="fa">فارسی</option><option value="ar">العربية</option><option value="hi">हिन्दी</option>
+          <option value="tr">Türkçe</option><option value="ko">한국어</option>
+        </select>
+      </div>
+    </div>
+  </header>
+
+  <div class="layout">
+    <main class="content">
+      <!-- Search row -->
+      <section class="searchbar glass">
+        <button id="openFilters" class="ghost">⚙️ Filters</button>
+        <!-- prevent browser from restoring old query -->
+        <input id="query" type="text" placeholder="Search PubMed…" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" />
+        <button id="searchBtn">Search</button>
+      </section>
+
+      <section class="glass">
+        <h2 data-i18n="results">Search Results</h2>
+        <div id="results" aria-live="polite"></div>
+      </section>
+
+      <section id="paperSection" class="hidden glass">
+        <h2 data-i18n="selectedPaper">Selected Paper</h2>
+        <pre id="abstract"></pre>
+
+        <div class="summary">
+          <button id="summBtn" data-i18n="summarize">Summarize</button>
+          <div id="summaryText"></div>
+        </div>
+
+        <div class="reputation">
+          <h3>Journal Reputation</h3>
+
+          <!-- NEW: Inline SVG bar chart renders here -->
+          <div id="repChartSvg"></div>
+
+          <div id="repExplain" class="muted"></div>
+          <div id="repBadge" class="badge">—</div>
+          <div class="meter"><span id="repMeter"></span></div>
+          <div id="repBreakdown"></div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- Filters Drawer -->
+  <aside id="filterDrawer" class="drawer hidden">
+    <div class="drawer-inner">
+      <div class="drawer-header">
+        <strong>Filters</strong>
+        <button id="closeFilters" class="ghost">✖</button>
+      </div>
+
+      <div class="field">
+        <label>Publication date</label>
+        <div class="two">
+          <input id="startYear" type="number" min="1800" max="2100" value="2000" />
+          <input id="endYear" type="number" min="1800" max="2100" value="2025" />
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Text availability</label>
+        <select id="textAvailability">
+          <option>Any</option><option>Abstract</option><option>Free full text</option><option>Full text</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>Article language</label>
+        <select id="language">
+          <option>Any</option><option>English</option><option>Spanish</option><option>French</option><option>German</option>
+          <option>Italian</option><option>Portuguese</option><option>Russian</option><option>Chinese</option>
+          <option>Japanese</option><option>Persian</option><option>Arabic</option><option>Hindi</option>
+          <option>Turkish</option><option>Korean</option>
+        </select>
+      </div>
+
+      <button id="expandFilters" class="secondary">+ See all the filters</button>
+
+      <div id="advancedFilters" class="hidden">
+        <div class="field">
+          <label>Article attribute</label>
+          <select id="articleAttribute">
+            <option>None</option><option>Systematic Review</option><option>Clinical Trial</option>
+            <option>Randomized Controlled Trial</option><option>Review</option><option>Meta-Analysis</option>
+            <option>Case Reports</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label>Article type</label>
+          <select id="articleType">
+            <option>None</option><option>Journal Article</option><option>Editorial</option><option>Letter</option><option>Guideline</option>
+            <option>Dataset</option>
+          </select>
+        </div>
+
+        <div class="field"><label>Species</label>
+          <select id="species"><option>Any</option><option>Humans</option><option>Animals</option></select>
+        </div>
+        <div class="field"><label>Sex</label>
+          <select id="sex"><option>Any</option><option>Male</option><option>Female</option></select>
+        </div>
+        <div class="field"><label>Age</label>
+          <select id="age"><option>Any</option><option>Child</option><option>Adolescent</option><option>Adult</option><option>Middle Aged</option><option>Aged</option></select>
+        </div>
+        <div class="field"><label>Other</label>
+          <select id="other"><option>None</option><option>Preprint</option><option>Retracted</option></select>
+        </div>
+      </div>
+
+      <div class="drawer-actions">
+        <button id="applyFilters">Apply</button>
+        <button id="clearBtn" class="ghost">Clear</button>
+      </div>
+    </div>
+  </aside>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>
