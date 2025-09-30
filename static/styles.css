@@ -1,0 +1,142 @@
+:root{
+  --bg:#0b1020; --panel:#121931; --card:#171f3b; --muted:#c9d4f0; --text:#f3f6ff; --accent:#5ad1ff;
+  --accent2:#aef45a; --danger:#ff6b6b; --space:16px; --radius:14px;
+}
+
+*{box-sizing:border-box}
+
+/* Background with subtle brightening overlay and space texture */
+body{
+  margin:0;
+  background:
+    linear-gradient(rgba(255,255,255,.18), rgba(255,255,255,.18)),
+    linear-gradient(rgba(8,12,26,.25), rgba(8,12,26,.25)),
+    url("/static/bg-wormhole.png") center / cover fixed no-repeat;
+  color:var(--text);
+  font:15px/1.5 Inter,system-ui,Segoe UI,Roboto,Arial;
+}
+
+/* Keep consistent with inline style overrides in index.html */
+.topbar{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:14px 20px;
+  background:rgba(14,22,46,.18);
+  border-bottom:1px solid rgba(255,255,255,.2);
+  backdrop-filter: blur(3px);
+  position:sticky;top:0;z-index:10
+}
+.brand{font-weight:700;letter-spacing:.2px}
+
+/* Make native selects readable on dark background */
+.lang select{
+  background:#000;           /* dark dropdown surface */
+  color:#fff;                /* white text */
+  border:1px solid rgba(255,255,255,.25);
+  border-radius:10px;
+  padding:8px 10px;
+  height:40px;
+}
+.lang label{font-size:14px}
+
+/* Some browsers allow styling options; provide contrasting colors */
+.lang select option{
+  color:#000;
+  background:#fff;
+}
+
+/* Layout containers */
+.layout{display:grid;grid-template-columns:1fr;gap:20px;padding:20px}
+.content{background:transparent;border:0;border-radius:0;padding:0}
+.glass{background:transparent;border:0;border-radius:14px;padding:16px;box-shadow:none;backdrop-filter:none}
+
+/* Search bar */
+.searchbar{
+  display:flex;gap:12px;align-items:center;margin:0 auto 14px;
+  width:min(1200px, 96vw);
+}
+.searchbar input{flex:5 1 900px}
+.searchbar button#openFilters{flex:0 0 auto}
+.searchbar button#searchBtn{flex:0 0 auto;padding:12px 20px}
+
+/* Sections width alignment */
+.content > section, section.glass{
+  width:min(1200px, 96vw);
+  margin:0 auto 16px;
+}
+
+/* Results list */
+#results .card{
+  background:transparent;border:0;border-radius:0;padding:12px 0;margin:10px 0
+}
+#results .card + .card{
+  border-top:1px dashed rgba(255,255,255,.28);
+  padding-top:14px;margin-top:14px
+}
+.title{font-weight:600}
+.meta{color:var(--muted);font-size:13px;margin:6px 0 10px}
+.actions{display:flex;gap:8px}
+
+/* Inputs & buttons */
+select,input,button{
+  border-radius:12px;
+  border:1px solid rgba(255,255,255,.25);
+  background:transparent;
+  color:var(--text)
+}
+select,input{padding:10px;width:100%}
+button{padding:10px 14px;cursor:pointer;background:var(--accent);color:#00121a;border:none;font-weight:600}
+button.secondary{background:var(--accent2);color:#041207}
+button.ghost{background:transparent;color:var(--text);border:1px solid rgba(255,255,255,.35)}
+button:disabled{opacity:.6;cursor:not-allowed}
+
+/* Pre blocks (abstract) */
+pre{
+  white-space:pre-wrap;
+  background:transparent;
+  border:1px dashed rgba(255,255,255,.30);
+  border-radius:12px;padding:12px
+}
+
+/* Filters drawer */
+.drawer{position:relative}
+.drawer.hidden{display:none}
+.drawer-inner{
+  width:min(1100px, 96vw);
+  margin:0 auto;
+  background:rgba(14,22,46,.18);
+  border:1px solid rgba(255,255,255,.2);
+  border-radius:14px;
+  padding:16px;
+  backdrop-filter: blur(3px);
+}
+.drawer-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.field{margin-bottom:12px}
+.field label{display:block;color:var(--muted);margin-bottom:6px}
+.field .two{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.drawer-actions{display:flex;gap:8px;justify-content:flex-end}
+
+/* Reputation badge and meter (reinforced in index inline too) */
+.badge{
+  display:inline-block; margin:8px 0; padding:6px 10px;
+  border-radius:999px; font-weight:800; letter-spacing:.2px; color:#00121a;
+}
+.badge.low{ background:#ff8080; }
+.badge.medium{ background:#ffd166; }
+.badge.high{ background:#8df59a; }
+.badge.veryhigh{ background:#5ad1ff; }
+
+.meter{
+  width:100%; height:10px; background:rgba(255,255,255,.18);
+  border-radius:999px; overflow:hidden; border:1px solid rgba(255,255,255,.25); margin:6px 0 10px;
+}
+.meter > span{
+  display:block; height:100%; width:0%;
+  background:linear-gradient(90deg,#ff9f66,#aef45a,#5ad1ff);
+  transition:width .4s ease;
+}
+
+#repBreakdown .rowline{
+  display:flex; justify-content:space-between; gap:10px;
+  padding:6px 0; border-top:1px dashed rgba(255,255,255,.25);
+}
+#repBreakdown .rowline:first-child{ border-top:0; }
